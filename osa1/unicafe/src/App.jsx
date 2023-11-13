@@ -21,9 +21,18 @@ const Percentage = (props) => {
 } 
 
 const Statistics = (props) => {
-  console.log(props)
+  if (props.all === 0) {
+    return (
+      <div>
+        No feedback given
+      </div>
+    )
+  }
   return (
     <div>
+      <p>good {props.good}</p>
+      <p>neutral {props.neutral}</p>
+      <p>bad {props.bad}</p>
       <p>all {props.all}</p>
       <p>average {props.average/props.all}</p>
       <Percentage all={props.all} good={props.good} />
@@ -45,10 +54,7 @@ const App = () => {
       <Button handleClick={() => setNeutral(neutral + 1) + setAll(all + 1) + setAverage(average + 0)} text="neutral" />
       <Button handleClick={() => setBad(bad + 1) + setAll(all + 1)+ setAverage(average -1)} text="bad" />
       <Header header="statistics" />
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <Statistics all={all} average={average} good={good} />
+      <Statistics good={good} neutral={neutral} bad={bad} all={all} average={average} />
     </div>
   )
 }
