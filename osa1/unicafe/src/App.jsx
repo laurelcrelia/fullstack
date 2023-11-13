@@ -15,10 +15,11 @@ const Button = ({ handleClick, text }) => (
   </button>
 )
 
-const Percentage = (props) => {
-  console.log(props)
-  return <p> positive {(100 * props.good) / props.all} %</p>
-} 
+const StatisticLine = ({ text, value }) => (
+  <div>
+    <p>{text} {value}</p>
+  </div>
+)
 
 const Statistics = (props) => {
   if (props.all === 0) {
@@ -30,12 +31,12 @@ const Statistics = (props) => {
   }
   return (
     <div>
-      <p>good {props.good}</p>
-      <p>neutral {props.neutral}</p>
-      <p>bad {props.bad}</p>
-      <p>all {props.all}</p>
-      <p>average {props.average/props.all}</p>
-      <Percentage all={props.all} good={props.good} />
+      <StatisticLine text="good" value ={props.good} />
+      <StatisticLine text="neutral" value ={props.neutral} />
+      <StatisticLine text="bad" value ={props.bad} />
+      <StatisticLine text="all" value ={props.all} />
+      <StatisticLine text="average" value ={props.average/props.all} />
+      <StatisticLine text="positive" value ={(100 * props.good) / props.all + " %"} />
     </div>
   )
 }
