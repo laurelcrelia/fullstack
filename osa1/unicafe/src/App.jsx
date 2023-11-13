@@ -20,6 +20,17 @@ const Percentage = (props) => {
   return <p> positive {(100 * props.good) / props.all} %</p>
 } 
 
+const Statistics = (props) => {
+  console.log(props)
+  return (
+    <div>
+      <p>all {props.all}</p>
+      <p>average {props.average/props.all}</p>
+      <Percentage all={props.all} good={props.good} />
+    </div>
+  )
+}
+
 const App = () => {
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
@@ -37,9 +48,7 @@ const App = () => {
       <p>good {good}</p>
       <p>neutral {neutral}</p>
       <p>bad {bad}</p>
-      <p>all {all}</p>
-      <p>average {average/all}</p>
-      <Percentage all={all} good={good} />
+      <Statistics all={all} average={average} good={good} />
     </div>
   )
 }
