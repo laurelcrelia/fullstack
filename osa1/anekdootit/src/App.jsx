@@ -6,6 +6,13 @@ const Button = ({ handleClick, text }) => (
   </button>
 )
 
+const SetPoints = (selected, points) => {
+  const copy = [...points]
+
+  copy[selected] += 1
+  return copy
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -19,10 +26,15 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  const indexes = [0, 0, 0, 0, 0, 0, 0, 0]
+  const [points, setVotes] = useState(indexes) 
+  console.log("Index:" + selected, "Points:" + points[selected])        
 
   return (
     <div>
       <p>{anecdotes[selected]}</p>
+      <p>has {points[selected]} votes</p>
+      <Button handleClick={() => setVotes(SetPoints(selected, points))}  text="vote" />
       <Button handleClick={() => setSelected(Math.floor(Math.random() * 8))}  text="next anecdote" />
     </div>
   )
