@@ -94,7 +94,21 @@ const App = () => {
         }, 5000);
       })
       .catch((error) => {
-        console.log(error.response);
+        if (error.response.status === 404) {
+          setNotificationMessage(
+            `Information of ${person.name} has already been removed from server`
+          );
+          setNotificationType("error");
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 5000);
+        } else {
+          setNotificationMessage(`Updating ${person.name}'s number  failed.`);
+          setNotificationType("error");
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 5000);
+        }
       });
   };
 
