@@ -26,11 +26,18 @@ const App = () => {
     setNewFilter(event.target.value);
   };
 
+  const handleShowCountry = (filter) => {
+    setNewFilter(filter);
+  };
+
   return (
     <div>
       <Filter value={newFilter} onChange={handleFilterCountry} />
 
-      <CountryList countries={countriesToShow} />
+      <CountryList
+        countries={countriesToShow}
+        handleClick={handleShowCountry}
+      />
     </div>
   );
 };
