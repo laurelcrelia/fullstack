@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import noteService from "./services/countries";
+import countryService from "./services/countries";
 import Filter from "./components/Filter";
 import CountryList from "./components/CountryList";
 
@@ -9,7 +9,7 @@ const App = () => {
   const [showFiltered, setShowFiltered] = useState(true);
 
   useEffect(() => {
-    noteService.getAll().then((response) => {
+    countryService.getAll().then((response) => {
       setCountries(response.data);
     });
   }, []);
