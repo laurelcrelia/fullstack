@@ -29,7 +29,7 @@ const App = () => {
     setNewFilter(event.target.value);
   };
 
-  const addName = (event) => {
+  const addPerson = (event) => {
     event.preventDefault();
     const personObject = {
       name: newName,
@@ -38,12 +38,28 @@ const App = () => {
     if (persons.some((person) => person.name === newName)) {
       window.alert(`${newName} is already added to phonebook`);
     } else {
-      noteService.create(personObject).then((returnedPerson) => {
-        setPersons(persons.concat(returnedPerson));
-        setNewName("");
-        setNewNumber("");
-      });
+      noteService
+        .createPerson(personObject)
+        .then((returnedPerson) => {
+          setPersons(persons.concat(returnedPerson));
+          setNewName("");
+          setNewNumber("");
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+        });
     }
+  };
+
+  const deletePerson = (id) => {
+    noteService
+      .deletePerson(id)
+      .then(() => {
+        setPersons(persons.filter((person) => person.id !== id));
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+      });
   };
 
   const handleNameChange = (event) => {
@@ -52,6 +68,14 @@ const App = () => {
 
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value);
+  };
+
+  const handleDelete = (person) => {
+    if (window.confirm(`Delete ${person.name} ?`)) {
+      deletePerson(person.id);
+    } else {
+      return;
+    }
   };
 
   return (
@@ -63,7 +87,7 @@ const App = () => {
       <h2>Add a new</h2>
 
       <PersonForm
-        onSubmit={addName}
+        onSubmit={addPerson}
         nameValue={newName}
         numberValue={newNumber}
         onNameChange={handleNameChange}
@@ -72,7 +96,7 @@ const App = () => {
 
       <h2>Numbers</h2>
 
-      <PersonList persons={personsToShow} />
+      <PersonList persons={personsToShow} onDelete={handleDelete} />
     </div>
   );
 };
