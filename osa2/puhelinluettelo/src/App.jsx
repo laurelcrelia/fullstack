@@ -3,6 +3,7 @@ import noteService from "./services/persons";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import PersonList from "./components/PersonList";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -10,6 +11,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [newFilter, setNewFilter] = useState("");
   const [showFiltered, setShowFiltered] = useState(true);
+  const [notificationMessage, setNotificationMessage] = useState(null);
+  const [notificationType, setNotificationType] = useState(null);
 
   useEffect(() => {
     noteService.getAll().then((response) => {
@@ -37,30 +40,37 @@ const App = () => {
         )
       ) {
         updateNumber(person.id);
-      } else {
-        setNewName("");
-        setNewNumber("");
-        return;
       }
     } else {
       noteService
         .createPerson(personObject)
         .then((returnedPerson) => {
           setPersons(persons.concat(returnedPerson));
-          setNewName("");
-          setNewNumber("");
+          setNotificationMessage(`Added ${newName}`);
+          setNotificationType("success");
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 5000);
         })
         .catch((error) => {
           console.log(error.response);
         });
     }
+    setNewName("");
+    setNewNumber("");
   };
 
   const deletePerson = (id) => {
+    const person = persons.find((person) => person.id === id);
     noteService
       .deletePerson(id)
       .then(() => {
         setPersons(persons.filter((person) => person.id !== id));
+        setNotificationMessage(`${person.name} was deleted`);
+        setNotificationType("success");
+        setTimeout(() => {
+          setNotificationMessage(null);
+        }, 5000);
       })
       .catch((error) => {
         console.log(error.response);
@@ -77,6 +87,11 @@ const App = () => {
         setPersons(
           persons.map((person) => (person.id !== id ? person : returnedPerson))
         );
+        setNotificationMessage(`Updated ${person.name}'s number`);
+        setNotificationType("success");
+        setTimeout(() => {
+          setNotificationMessage(null);
+        }, 5000);
       })
       .catch((error) => {
         console.log(error.response);
@@ -107,7 +122,8 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <Notification message={notificationMessage} type={notificationType} />
 
       <Filter value={newFilter} onChange={handleFilterName} />
 
