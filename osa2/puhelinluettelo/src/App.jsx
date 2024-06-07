@@ -23,20 +23,25 @@ const App = () => {
         person.name.toLowerCase().includes(newFilter.toLowerCase())
       );
 
-  const handleFilterName = (event) => {
-    event.preventDefault();
-    setShowFiltered(false);
-    setNewFilter(event.target.value);
-  };
-
   const addPerson = (event) => {
     event.preventDefault();
     const personObject = {
       name: newName,
       number: newNumber,
     };
-    if (persons.some((person) => person.name === newName)) {
-      window.alert(`${newName} is already added to phonebook`);
+    const person = persons.find((person) => person.name === newName);
+    if (person) {
+      if (
+        window.confirm(
+          `${person.name} is already added to phonebook, replace the old number with a new one?`
+        )
+      ) {
+        updateNumber(person.id);
+      } else {
+        setNewName("");
+        setNewNumber("");
+        return;
+      }
     } else {
       noteService
         .createPerson(personObject)
@@ -46,7 +51,7 @@ const App = () => {
           setNewNumber("");
         })
         .catch((error) => {
-          console.log(error.response.data);
+          console.log(error.response);
         });
     }
   };
@@ -58,8 +63,30 @@ const App = () => {
         setPersons(persons.filter((person) => person.id !== id));
       })
       .catch((error) => {
-        console.log(error.response.data);
+        console.log(error.response);
       });
+  };
+
+  const updateNumber = (id) => {
+    const person = persons.find((n) => n.id === id);
+    const changedNumber = { ...person, number: newNumber };
+
+    noteService
+      .updatePerson(id, changedNumber)
+      .then((returnedPerson) => {
+        setPersons(
+          persons.map((person) => (person.id !== id ? person : returnedPerson))
+        );
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+  };
+
+  const handleFilterName = (event) => {
+    event.preventDefault();
+    setShowFiltered(false);
+    setNewFilter(event.target.value);
   };
 
   const handleNameChange = (event) => {
