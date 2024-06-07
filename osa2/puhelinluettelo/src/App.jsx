@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import noteService from "./services/persons";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import PersonList from "./components/PersonList";
@@ -12,13 +12,10 @@ const App = () => {
   const [showFiltered, setShowFiltered] = useState(true);
 
   useEffect(() => {
-    console.log("effect");
-    axios.get("http://localhost:3001/persons").then((response) => {
-      console.log("promise fulfilled");
+    noteService.getAll().then((response) => {
       setPersons(response.data);
     });
   }, []);
-  console.log("render", persons.length, "persons");
 
   const personsToShow = showFiltered
     ? persons
@@ -41,10 +38,12 @@ const App = () => {
     if (persons.some((person) => person.name === newName)) {
       window.alert(`${newName} is already added to phonebook`);
     } else {
-      setPersons(persons.concat(personObject));
+      noteService.create(personObject).then((returnedPerson) => {
+        setPersons(persons.concat(returnedPerson));
+        setNewName("");
+        setNewNumber("");
+      });
     }
-    setNewName("");
-    setNewNumber("");
   };
 
   const handleNameChange = (event) => {
