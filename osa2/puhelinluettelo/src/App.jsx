@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import noteService from "./services/persons";
+import personService from "./services/persons";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import PersonList from "./components/PersonList";
@@ -15,7 +15,7 @@ const App = () => {
   const [notificationType, setNotificationType] = useState(null);
 
   useEffect(() => {
-    noteService.getAll().then((response) => {
+    personService.getAll().then((response) => {
       setPersons(response.data);
     });
   }, []);
@@ -42,7 +42,7 @@ const App = () => {
         updateNumber(person.id);
       }
     } else {
-      noteService
+      personService
         .createPerson(personObject)
         .then((returnedPerson) => {
           setPersons(persons.concat(returnedPerson));
@@ -53,7 +53,12 @@ const App = () => {
           }, 5000);
         })
         .catch((error) => {
-          console.log(error.response);
+          setNotificationMessage(error.response.data.error);
+          setNotificationType("error");
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 5000);
+          console.log(error.response.data);
         });
     }
     setNewName("");
@@ -62,7 +67,7 @@ const App = () => {
 
   const deletePerson = (id) => {
     const person = persons.find((person) => person.id === id);
-    noteService
+    personService
       .deletePerson(id)
       .then(() => {
         setPersons(persons.filter((person) => person.id !== id));
@@ -81,7 +86,7 @@ const App = () => {
     const person = persons.find((n) => n.id === id);
     const changedNumber = { ...person, number: newNumber };
 
-    noteService
+    personService
       .updatePerson(id, changedNumber)
       .then((returnedPerson) => {
         setPersons(
