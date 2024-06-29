@@ -42,8 +42,8 @@ const listWithManyBlogs = [
   {
     _id: '4a422aa71b54a676234d17f8',
     title: 'Testiblogi 4',
-    author: 'Daniel',
-    url: 'http://www.danielinblogi.fi',
+    author: 'Cecilia',
+    url: 'http://www.ceciliantoinenblogi.fi',
     likes: 3,
     __v: 0
   }
@@ -94,6 +94,27 @@ describe('favorite blog', () => {
       title: 'Testiblogi 3',
       author: 'Cecilia',
       likes: 3,
+    })
+  })
+})
+
+describe('most blogs', () => {
+  test('is calculated right when no blogs', () => {
+    const result = listHelper.mostBlogs(listWithoutBlogs)
+    assert.strictEqual(result, null)
+  })
+  test('is calculated right when one blog', () => {
+    const result = listHelper.mostBlogs(listWithOneBlog)
+    assert.deepEqual(result,  {
+      author: 'Edsger W. Dijkstra',
+      blogs: 1,
+    })
+  })
+  test('is calculated right when many blogs', () => {
+    const result = listHelper.mostBlogs(listWithManyBlogs)
+    assert.deepEqual(result,  {
+      author: 'Cecilia',
+      blogs: 2,
     })
   })
 })
