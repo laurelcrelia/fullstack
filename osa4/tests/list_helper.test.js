@@ -118,3 +118,24 @@ describe('most blogs', () => {
     })
   })
 })
+
+describe('most likes', () => {
+  test('is calculated right when no blogs', () => {
+    const result = listHelper.mostLikes(listWithoutBlogs)
+    assert.strictEqual(result, null)
+  })
+  test('is calculated right when one blog', () => {
+    const result = listHelper.mostLikes(listWithOneBlog)
+    assert.deepEqual(result,  {
+      author: 'Edsger W. Dijkstra',
+      likes: 5,
+    })
+  })
+  test('is calculated right when many blogs', () => {
+    const result = listHelper.mostLikes(listWithManyBlogs)
+    assert.deepEqual(result,  {
+      author: 'Cecilia',
+      likes: 6,
+    })
+  })
+})
