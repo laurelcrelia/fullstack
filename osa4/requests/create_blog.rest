@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Testiblogi",
+    "author": "Matti Meikalainen",
+    "url": "www.testiblogi.fi",
+    "likes": 1
+}
