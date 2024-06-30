@@ -82,7 +82,7 @@ describe('favorite blog', () => {
   })
   test('is calculated right when one blog', () => {
     const result = listHelper.favoriteBlog(listWithOneBlog)
-    assert.deepEqual(result,  {
+    assert.deepStrictEqual(result,  {
       title: 'Go To Statement Considered Harmful',
       author: 'Edsger W. Dijkstra',
       likes: 5,
@@ -90,7 +90,7 @@ describe('favorite blog', () => {
   })
   test('returns first of the favorite blogs when there are multiple with same amount of likes', () => {
     const result = listHelper.favoriteBlog(listWithManyBlogs)
-    assert.deepEqual(result,  {
+    assert.deepStrictEqual(result,  {
       title: 'Testiblogi 3',
       author: 'Cecilia',
       likes: 3,
@@ -105,14 +105,14 @@ describe('most blogs', () => {
   })
   test('is calculated right when one blog', () => {
     const result = listHelper.mostBlogs(listWithOneBlog)
-    assert.deepEqual(result,  {
+    assert.deepStrictEqual(result,  {
       author: 'Edsger W. Dijkstra',
       blogs: 1,
     })
   })
   test('is calculated right when many blogs', () => {
     const result = listHelper.mostBlogs(listWithManyBlogs)
-    assert.deepEqual(result,  {
+    assert.deepStrictEqual(result,  {
       author: 'Cecilia',
       blogs: 2,
     })
@@ -126,14 +126,14 @@ describe('most likes', () => {
   })
   test('is calculated right when one blog', () => {
     const result = listHelper.mostLikes(listWithOneBlog)
-    assert.deepEqual(result,  {
+    assert.deepStrictEqual(result,  {
       author: 'Edsger W. Dijkstra',
       likes: 5,
     })
   })
   test('is calculated right when many blogs', () => {
     const result = listHelper.mostLikes(listWithManyBlogs)
-    assert.deepEqual(result,  {
+    assert.deepStrictEqual(result,  {
       author: 'Cecilia',
       likes: 6,
     })

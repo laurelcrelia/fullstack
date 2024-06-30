@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "Testiblogi",
+    "title": "Oikea blogi",
     "author": "Matti Meikalainen",
-    "url": "www.testiblogi.fi",
+    "url": "www.matinoikeablogi.fi",
     "likes": 1
 }
