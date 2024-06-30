@@ -56,9 +56,29 @@ describe('blog POST api', () => {
       .expect(201)
       .expect('Content-Type', /application\/json/)
     const response = await api.get('/api/blogs')
-    const titles = response.body.map(r => r.title)
+
     assert.strictEqual(response.body.length, helper.initialBlogs.length + 1)
+
+    const titles = response.body.map(r => r.title)
     assert(titles.includes('Testing is straightforward!'))
+  })
+  test('adds 0 likes if the field is not given a value', async () => {
+    const newBlog = {
+      title: 'Testing needs to be done!',
+      author: 'Minja Meikalainen',
+      url: 'www.minjantestiblogi.fi',
+    }
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+    const response = await api.get('/api/blogs')
+
+    assert.strictEqual(response.body.length, helper.initialBlogs.length + 1)
+
+    const likes = response.body.map(r => r.likes)
+    assert(likes.includes(0))
   })
 })
 
