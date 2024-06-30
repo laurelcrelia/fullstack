@@ -125,6 +125,29 @@ describe('blog DELETE api', () => {
   })
 })
 
+describe('blog PUT api', () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+    await Blog.insertMany(helper.initialBlogs)
+  })
+  test('can update a blog', async () => {
+    const chosenId = 0
+    const firstResponse = await api.get('/api/blogs')
+    const chosenBlog = firstResponse.body[chosenId]
+    chosenBlog.likes += 1
+
+    await api
+      .put(`/api/blogs/${chosenBlog.id}`)
+      .send(chosenBlog)
+      .expect(200)
+
+    const secondResponse = await api.get('/api/blogs')
+    const updatedBlog = secondResponse.body.find(r => r.id === chosenBlog.id)
+    assert.strictEqual(updatedBlog.likes, chosenBlog.likes)
+    assert.strictEqual(updatedBlog.likes, helper.initialBlogs[chosenId].likes + 1)
+  })
+})
+
 after(async () => {
   await mongoose.connection.close()
 })

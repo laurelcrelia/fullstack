@@ -1,0 +1,9 @@
+PUT http://localhost:3003/api/blogs/668148d72427b3df7eb82836
+Content-Type: application/json
+
+{
+    "title": "Oikea blogi",
+    "author": "Matti Meikalainen",
+    "url": "www.matinoikeablogi.fi",
+    "likes": 7
+}
