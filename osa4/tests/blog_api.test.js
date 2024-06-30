@@ -8,20 +8,20 @@ const api = supertest(app)
 const helper = require('./test_helper')
 const Blog = require('../models/blog')
 
-describe('blog api tests', () => {
+describe('blog api', () => {
   beforeEach(async () => {
     await Blog.deleteMany({})
     await Blog.insertMany(helper.initialBlogs)
   })
 
-  test('blogs are returned as json', async () => {
+  test('returns blogs as json', async () => {
     await api
       .get('/api/blogs')
       .expect(200)
       .expect('Content-Type', /application\/json/)
   })
 
-  test('there are two blogs', async () => {
+  test('returns two blogs', async () => {
     const response = await api.get('/api/blogs')
 
     assert.strictEqual(response.body.length, 2)
