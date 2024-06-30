@@ -80,6 +80,28 @@ describe('blog POST api', () => {
     const likes = response.body.map(r => r.likes)
     assert(likes.includes(0))
   })
+  test('returns statuscode 400 if title is missing', async () => {
+    const newBlog = {
+      author: 'Maikku Meikalainen',
+      url: 'www.maikuntestiblogi.fi',
+      likes: 4
+    }
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+  })
+  test('returns statuscode 400 if url is missing', async () => {
+    const newBlog = {
+      title: 'Testing can be exhausting',
+      author: 'Minttu Meikalainen',
+      likes: 5
+    }
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+  })
 })
 
 after(async () => {
