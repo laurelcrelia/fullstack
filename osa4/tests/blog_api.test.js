@@ -7,6 +7,7 @@ const api = supertest(app)
 
 const helper = require('./test_helper')
 const Blog = require('../models/blog')
+const { blogsInDb } = require('./test_helper')
 
 describe('blog api', () => {
   beforeEach(async () => {
@@ -25,6 +26,15 @@ describe('blog api', () => {
     const response = await api.get('/api/blogs')
 
     assert.strictEqual(response.body.length, 2)
+  })
+
+  test('returned blogs have an id field', async () => {
+    const response = await api.get('/api/blogs')
+    const allHaveIdField = response.body.map(e => e.id !== undefined)
+    const amountOfIdFields = blogsInDb.length
+    for (let i = 0; i < amountOfIdFields; i++) {
+      assert.strictEqual(allHaveIdField[i], true)
+    }
   })
 })
 
