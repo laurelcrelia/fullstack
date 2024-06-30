@@ -104,6 +104,27 @@ describe('blog POST api', () => {
   })
 })
 
+describe('blog DELETE api', () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+    await Blog.insertMany(helper.initialBlogs)
+  })
+  test('can delete a blog', async () => {
+    const firstResponse = await api.get('/api/blogs')
+    const firstResponseIds = firstResponse.body.map(r => r.id)
+    const blogToDelete = firstResponseIds[0]
+
+    await api
+      .delete(`/api/blogs/${blogToDelete}`)
+      .expect(204)
+
+    const secondResponse = await api.get('/api/blogs')
+    const secondResponseIds = secondResponse.body.map(r => r.id)
+    assert.strictEqual(secondResponse.body.length, firstResponse.body.length - 1)
+    assert(!secondResponseIds.includes(blogToDelete))
+  })
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
