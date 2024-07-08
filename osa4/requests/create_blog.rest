@@ -1,11 +1,11 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hbGxhLm1hbGxpa2FzIiwiaWQiOiI2NjhiY2FmYmQ4MmJmZWM2YzNkODFkYjkiLCJpYXQiOjE3MjA0Mzc1MzN9.cnMxTvNMeYaM5ksdy19K90jwJD43-br2vwUGDyzaAlk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hbGxhLm1hbGxpa2FzIiwiaWQiOiI2NjhiY2FmYmQ4MmJmZWM2YzNkODFkYjkiLCJpYXQiOjE3MjA0NDEwNjV9.a6xywaOK0gxj_mxibQ6gxe-MZytxe08xQZ-K6OFaZhw
 
 {
-    "url": "www.mallanblogi.fi",
-    "title": "Mallan blogi",
+    "url": "www.mallantoinenblogi.fi",
+    "title": "Mallan toinen blogi",
     "author": "Malla Mallikas",
     "user": "668bcafbd82bfec6c3d81db9",
-    "likes": 3
+    "likes": 1
 }
