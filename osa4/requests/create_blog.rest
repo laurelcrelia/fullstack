@@ -1,10 +1,11 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hbGxhLm1hbGxpa2FzIiwiaWQiOiI2NjhiY2FmYmQ4MmJmZWM2YzNkODFkYjkiLCJpYXQiOjE3MjA0Mzc1MzN9.cnMxTvNMeYaM5ksdy19K90jwJD43-br2vwUGDyzaAlk
 
 {
-    "url": "www.maijanoikeablogi.fi",
-    "title": "Oikea blogi",
-    "author": "Maija Meikalainen",
-    "user": "668bc73446ac373fbb2fd1d9",
-    "likes": 2
+    "url": "www.mallanblogi.fi",
+    "title": "Mallan blogi",
+    "author": "Malla Mallikas",
+    "user": "668bcafbd82bfec6c3d81db9",
+    "likes": 3
 }
