@@ -2,8 +2,9 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
+    "url": "www.maijanoikeablogi.fi",
     "title": "Oikea blogi",
-    "author": "Matti Meikalainen",
-    "url": "www.matinoikeablogi.fi",
-    "likes": 1
+    "author": "Maija Meikalainen",
+    "user": "668bc73446ac373fbb2fd1d9",
+    "likes": 2
 }
