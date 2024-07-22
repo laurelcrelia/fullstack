@@ -19,8 +19,7 @@ const Blog = ({ blog, addLike, removeBlog, user }) => {
   if (!fullView) {
     return (
       <div style={blogStyle}>
-        {blog.title} {blog.author}{' '}
-        <button onClick={toggleFullView}>view</button>
+        {blog.title} <button onClick={toggleFullView}>view</button>
       </div>
     )
   }
