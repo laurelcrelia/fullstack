@@ -31,24 +31,32 @@ const App = () => {
     }
   }, [])
 
-  const addBlog = (blogObject) => {
+  const addBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility()
-    blogService
-      .create(blogObject)
-      .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-        setSuccessMessage(`a new blog ${blogObject.title} by ${blogObject.author} added`)
-        setTimeout(() => {
-          setSuccessMessage(null)
-        }, 4000)
-      }
-    )
-  }
+    const returnedBlog = await blogService.create(blogObject)
+      returnedBlog.user = { name: user.name }
+      setBlogs(blogs.concat(returnedBlog))
+      setSuccessMessage(`a new blog ${blogObject.title} by ${blogObject.author} added`)
+      setTimeout(() => {
+        setSuccessMessage(null)
+      }, 4000)
+    }
 
   const addLike = async (blogObject) => {
     const likedBlog = { ...blogObject, likes: blogObject.likes + 1 }
     await blogService.like(likedBlog)
     setBlogs(blogs.map(b => b.id === likedBlog.id ?  likedBlog : b))
+  }
+
+  const removeBlog = async (blogObject) => {
+    if (window.confirm(`Remove blog ${blogObject.title} by ${blogObject.author}`)) {
+      await blogService.remove(blogObject)
+      setBlogs(blogs.filter(b => b.id !== blogObject.id))
+      setSuccessMessage(`blog named ${blogObject.title} was successfully deleted`)
+      setTimeout(() => {
+        setSuccessMessage(null)
+      }, 4000)
+    }
   }
 
   const handleLogin = async (event) => {
@@ -125,7 +133,7 @@ const App = () => {
           </Togglable>
         </div>
         {sortedBlogs.map(blog =>
-          <Blog key={blog.id} blog={blog} addLike={addLike}/>
+          <Blog key={blog.id} blog={blog} addLike={addLike} removeBlog={removeBlog} user={user.name}/>
         )}
       </div>
       }
