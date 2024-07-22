@@ -12,9 +12,8 @@ const blog = {
 
 const testUser = 'Test User'
 
-const mockHandler = vi.fn()
-
 test('renders title', () => {
+  const mockHandler = vi.fn()
   render(
     <Blog
       blog={blog}
@@ -29,6 +28,7 @@ test('renders title', () => {
 })
 
 test('clicking the view button opens blog content', async () => {
+  const mockHandler = vi.fn()
   render(
     <Blog
       blog={blog}
@@ -45,4 +45,26 @@ test('clicking the view button opens blog content', async () => {
   screen.findByText(blog.url)
   screen.findByText(blog.likes)
   screen.findByText(blog.user.name)
+})
+
+test('clicking the like button twice calls event handler twice', async () => {
+  const mockHandler = vi.fn()
+  render(
+    <Blog
+      blog={blog}
+      addLike={mockHandler}
+      removeBlog={mockHandler}
+      user={testUser}
+    />
+  )
+
+  const user = userEvent.setup()
+  const viewButton = screen.getByText('view')
+  await user.click(viewButton)
+
+  const likeButton = screen.getByText('like')
+  await user.click(likeButton)
+  await user.click(likeButton)
+
+  expect(mockHandler.mock.calls).toHaveLength(2)
 })
