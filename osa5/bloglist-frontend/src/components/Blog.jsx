@@ -26,7 +26,7 @@ const Blog = ({ blog, addLike, removeBlog, user }) => {
   }
 
   return (
-    <div style={blogStyle}>
+    <div className='blog' style={blogStyle}>
       {blog.title} <button onClick={toggleFullView}>hide</button>
       <div>{blog.url}</div>
       <div>
