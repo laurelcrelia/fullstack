@@ -99,4 +99,43 @@ describe('Blog app', () => {
       await expect(page.getByRole('button', { name: 'remove' })).not.toBeVisible()
     })
   })
+
+  describe('Bloglist', () => {
+    test('has blogs ordered by likes', async ({ page }) => {
+      await loginWith(page, 'testaaja', 'salasana')
+
+      // Create initial blogs
+      await createBlog(page, 'Paras blogi', 'Testi Testaaja', 'www.paras.fi')
+      await createBlog(page, 'Keskiverto blogi', 'Testi Testaaja', 'www.keskiverto.fi')
+      await createBlog(page, 'Huonoin blogi', 'Testi Testaaja', 'www.huonoin.fi')
+
+      const blogListContainer = await page.locator('[data-testid="blog-list"]');
+
+      // Like the Paras blogi two times
+      const parasBlogContainer = await blogListContainer.locator('div:text("Paras blogi")');
+      await parasBlogContainer.locator('button', { name: 'view' }).click();
+      await parasBlogContainer.locator('div >> button', { name: 'like' }).click();
+      await parasBlogContainer.locator('div >> button', { name: 'like' }).click();
+      await expect(parasBlogContainer.locator('div:text("likes 2")')).toBeVisible();
+
+      // Like the Keskiverto blogi one time
+      const keskivertoBlogContainer = await blogListContainer.locator('div:text("Keskiverto blogi")');
+      await keskivertoBlogContainer.locator('button', { name: 'view' }).click();
+      await keskivertoBlogContainer.locator('div >> button', { name: 'like' }).click();
+      await expect(keskivertoBlogContainer.locator('div:text("likes 1")')).toBeVisible();
+
+      // Huonoin blogi has no likes
+      const huonoinBlogContainer = await blogListContainer.locator('div:text("Huonoin blogi")');
+      await huonoinBlogContainer.locator('button', { name: 'view' }).click();
+      await expect(huonoinBlogContainer.locator('div:text("likes 0")')).toBeVisible();
+
+      // Verify the order of the blogs
+      await expect(blogListContainer.locator('.blog').nth(0)).toContainText("Paras blogi");
+      await expect(blogListContainer.locator('.blog').nth(1)).toContainText("Keskiverto blogi");
+      await expect(blogListContainer.locator('.blog').nth(2)).toContainText("Huonoin blogi");
+
+    })
+
+  })
+
 })
