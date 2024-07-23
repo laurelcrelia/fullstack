@@ -45,19 +45,30 @@ describe('Blog app', () => {
     })
 
     test('a new blog can be created', async ({ page }) => {
-      await createBlog(page, 'Testiblogi', 'Testi Testaaja', 'www.testi.fi')
+      await createBlog(page, 'Luontiblogi', 'Testi Testaaja', 'www.luontitesti.fi')
       
-      await expect(page.getByText('a new blog Testiblogi by Testi Testaaja added')).toBeVisible()
-      await expect(page.getByTestId('blog-list')).toHaveText('Testiblogi'+' '+viewButton)
+      await expect(page.getByText('a new blog Luontiblogi by Testi Testaaja added')).toBeVisible()
+      await expect(page.getByTestId('blog-list')).toHaveText('Luontiblogi'+' '+viewButton)
     })
 
     test('a blog can be liked', async ({ page }) => {
-      await createBlog(page, 'Testiblogi', 'Testi Testaaja', 'www.testi.fi')
+      await createBlog(page, 'Tykkäysblogi', 'Testi Testaaja', 'www.tykkäystesti.fi')
       await page.getByRole('button', { name: 'view' }).click()
       await expect(page.getByText('likes 0')).toBeVisible()
 
       await page.getByRole('button', { name: 'like' }).click()
       await expect(page.getByText('likes 1')).toBeVisible()
+    })
+
+    test('a blog can be removed by its creator', async ({ page }) => {
+      await createBlog(page, 'Poistoblogi', 'Testi Testaaja', 'www.poistotesti.fi')
+      await page.getByRole('button', { name: 'view' }).click()
+
+      page.on('dialog', dialog => dialog.accept());
+      await page.getByRole('button', { name: 'remove' }).click()
+
+      await expect(page.getByText('blog named Poistoblogi was successfully deleted')).toBeVisible()
+      await expect(page.getByTestId('blog-list')).not.toHaveText('Poistoblogi')
     })
   })
 })
