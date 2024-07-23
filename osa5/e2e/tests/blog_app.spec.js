@@ -1,16 +1,17 @@
 const { test, expect, describe, beforeEach } = require('@playwright/test')
+const { loginWith, createBlog } = require('./helper')
 
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
-    await request.post('http:localhost:3003/api/testing/reset')
-    await request.post('http://localhost:3003/api/users', {
+    await request.post('/api/testing/reset')
+    await request.post('/api/users', {
       data: {
         name: 'Testi Testaaja',
         username: 'testaaja',
         password: 'salasana'
       }
     })
-    await page.goto('http://localhost:5173')
+    await page.goto('')
   })
 
   test('login form is shown', async ({ page }) => {
@@ -21,8 +22,7 @@ describe('Blog app', () => {
 
   describe('Login', () => {
     test('succeeds with correct credentials', async ({ page }) => {
-      await page.getByTestId('username').fill('testaaja')
-      await page.getByTestId('password').fill('salasana')
+      await loginWith(page, 'testaaja', 'salasana')
   
       await page.getByRole('button', { name: 'login' }).click()
     
@@ -30,8 +30,7 @@ describe('Blog app', () => {
     })
 
     test('fails with wrong credentials', async ({ page }) => {
-      await page.getByTestId('username').fill('testaaja')
-      await page.getByTestId('password').fill('vääräsalasana')
+      await loginWith(page, 'testaaja', 'vääräsalasana')
   
       await page.getByRole('button', { name: 'login' }).click()
     
@@ -42,22 +41,23 @@ describe('Blog app', () => {
   describe('When logged in', () => {
     const viewButton = 'view'
     beforeEach(async ({ page }) => {
-      await page.getByTestId('username').fill('testaaja')
-      await page.getByTestId('password').fill('salasana')
-      await page.getByRole('button', { name: 'login' }).click()
+      await loginWith(page, 'testaaja', 'salasana')
     })
 
     test('a new blog can be created', async ({ page }) => {
-      await page.getByRole('button', { name: 'create new blog' }).click()
-
-      await page.getByTestId('title').fill('Testiblogi')
-      await page.getByTestId('author').fill('Testi Testaaja')
-      await page.getByTestId('url').fill('www.testiblogi.fi')
-
-      await page.getByRole('button', { name: 'create' }).click()
+      await createBlog(page, 'Testiblogi', 'Testi Testaaja', 'www.testi.fi')
       
       await expect(page.getByText('a new blog Testiblogi by Testi Testaaja added')).toBeVisible()
       await expect(page.getByTestId('blog-list')).toHaveText('Testiblogi'+' '+viewButton)
+    })
+
+    test('a blog can be liked', async ({ page }) => {
+      await createBlog(page, 'Testiblogi', 'Testi Testaaja', 'www.testi.fi')
+      await page.getByRole('button', { name: 'view' }).click()
+      await expect(page.getByText('likes 0')).toBeVisible()
+
+      await page.getByRole('button', { name: 'like' }).click()
+      await expect(page.getByText('likes 1')).toBeVisible()
     })
   })
 })
