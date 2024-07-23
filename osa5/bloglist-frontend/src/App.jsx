@@ -94,6 +94,7 @@ const App = () => {
       <div>
         username
         <input
+          data-testid='username'
           type='text'
           value={username}
           name='Username'
@@ -103,6 +104,7 @@ const App = () => {
       <div>
         password
         <input
+          data-testid='password'
           type='password'
           value={password}
           name='Password'
@@ -137,15 +139,17 @@ const App = () => {
               <BlogForm createBlog={addBlog} />
             </Togglable>
           </div>
-          {sortedBlogs.map((blog) => (
-            <Blog
-              key={blog.id}
-              blog={blog}
-              addLike={addLike}
-              removeBlog={removeBlog}
-              user={user.name}
-            />
-          ))}
+          <div data-testid='blog-list'>
+            {sortedBlogs.map((blog) => (
+              <Blog
+                key={blog.id}
+                blog={blog}
+                addLike={addLike}
+                removeBlog={removeBlog}
+                user={user.name}
+              />
+            ))}
+          </div>
         </div>
       )}
     </div>
