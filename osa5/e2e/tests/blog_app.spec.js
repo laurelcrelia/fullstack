@@ -11,6 +11,13 @@ describe('Blog app', () => {
         password: 'salasana'
       }
     })
+    await request.post('/api/users', {
+      data: {
+        name: 'Tauno Temmeltäjä',
+        username: 'temmeltäjä',
+        password: 'salainen'
+      }
+    })
     await page.goto('')
   })
 
@@ -69,6 +76,27 @@ describe('Blog app', () => {
 
       await expect(page.getByText('blog named Poistoblogi was successfully deleted')).toBeVisible()
       await expect(page.getByTestId('blog-list')).not.toHaveText('Poistoblogi')
+    })
+  })
+
+  describe('When removing a blog', () => {
+
+    test('only creator can see remove button', async ({ page }) => {
+      // Login as testaaja and create a blog
+      await loginWith(page, 'testaaja', 'salasana')
+      await createBlog(page, 'Testiblogi', 'Testi Testaaja', 'www.testiblogi.fi')
+
+      // testaaja sees remove button
+      await page.getByRole('button', { name: 'view' }).click()
+      await expect(page.getByRole('button', { name: 'remove' })).toBeVisible()
+
+      // Logout and login as temmeltäjä
+      await page.getByRole('button', { name: 'logout' }).click()
+      await loginWith(page, 'temmeltäjä', 'salainen')
+
+      // temmeltäjä does not see remove button
+      await page.getByRole('button', { name: 'view' }).click()
+      await expect(page.getByRole('button', { name: 'remove' })).not.toBeVisible()
     })
   })
 })
